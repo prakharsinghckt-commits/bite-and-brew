@@ -568,7 +568,104 @@ footer{
     text-align:center;
   }
 }
-</style>
+/* BOOKING POPUP */
+
+.booking-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.booking-overlay.active{
+  display:flex;
+}
+
+.booking-box{
+  width:100%;
+  max-width:500px;
+  background:#121212;
+  border:1px solid #333;
+  border-radius:24px;
+  padding:32px;
+  position:relative;
+  box-shadow:0 25px 80px rgba(0,0,0,.6);
+}
+
+.booking-box h2{
+  font-size:32px;
+  margin-bottom:5px;
+}
+
+.booking-box > p{
+  color:#888;
+  margin-bottom:25px;
+}
+
+.close-booking{
+  position:absolute;
+  top:18px;
+  right:20px;
+  border:0;
+  background:none;
+  color:#aaa;
+  font-size:28px;
+  cursor:pointer;
+}
+
+.close-booking:hover{
+  color:var(--orange);
+}
+
+.booking-form{
+  display:grid;
+  gap:15px;
+}
+
+.booking-form label{
+  color:#bbb;
+  font-size:13px;
+  font-weight:700;
+}
+
+.booking-form input,
+.booking-form select{
+  width:100%;
+  padding:13px 15px;
+  margin-top:6px;
+  border-radius:12px;
+  border:1px solid #333;
+  background:#0b0b0b;
+  color:#fff;
+  outline:none;
+}
+
+.booking-form input:focus,
+.booking-form select:focus{
+  border-color:var(--orange);
+}
+
+.booking-submit{
+  border:0;
+  cursor:pointer;
+  width:100%;
+  margin-top:5px;
+}
+
+@media(max-width:600px){
+  .booking-box{
+    padding:25px 20px;
+  }
+
+  .booking-box h2{
+    font-size:27px;
+  }
+}</style>
 </head>
 
 <body>
@@ -586,7 +683,7 @@ footer{
     <li><a href="#contact">Contact</a></li>
   </ul>
 
-  <a href="#contact" class="nav-button">Book a Table</a>
+  <a href="javascript:void(0)" onclick="openBooking()" class="nav-button">Book a Table</a>
 </nav>
 
 
@@ -874,5 +971,121 @@ footer{
 
 </footer>
 
-</body>
+<!-- BOOKING POPUP -->
+
+<div class="booking-overlay" id="bookingPopup">
+
+  <div class="booking-box">
+
+    <button
+      class="close-booking"
+      onclick="closeBooking()"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+    <h2>Book a Table 🍽️</h2>
+
+    <p>Reserve your table at Bite & Brew.</p>
+
+    <form class="booking-form" onsubmit="sendBooking(event)">
+
+      <label>
+        Your Name
+        <input
+          type="text"
+          id="bookingName"
+          placeholder="Enter your name"
+          required
+        >
+      </label>
+
+      <label>
+        Phone Number
+        <input
+          type="tel"
+          id="bookingPhone"
+          placeholder="Enter your phone number"
+          required
+        >
+      </label>
+
+      <label>
+        Date
+        <input
+          type="date"
+          id="bookingDate"
+          required
+        >
+      </label>
+
+      <label>
+        Time
+        <input
+          type="time"
+          id="bookingTime"
+          required
+        >
+      </label>
+
+      <label>
+        Number of Guests
+        <select id="bookingGuests" required>
+          <option value="">Select guests</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6+</option>
+        </select>
+      </label>
+
+      <button type="submit" class="btn primary booking-submit">
+        💬 Send Booking Request
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<script>
+
+function openBooking(){
+  document.getElementById("bookingPopup").classList.add("active");
+}
+
+function closeBooking(){
+  document.getElementById("bookingPopup").classList.remove("active");
+}
+
+function sendBooking(event){
+
+  event.preventDefault();
+
+  const name = document.getElementById("bookingName").value;
+  const phone = document.getElementById("bookingPhone").value;
+  const date = document.getElementById("bookingDate").value;
+  const time = document.getElementById("bookingTime").value;
+  const guests = document.getElementById("bookingGuests").value;
+
+  const message =
+    "Hello Bite & Brew!%0A%0A" +
+    "I would like to book a table.%0A%0A" +
+    "Name: " + encodeURIComponent(name) + "%0A" +
+    "Phone: " + encodeURIComponent(phone) + "%0A" +
+    "Date: " + encodeURIComponent(date) + "%0A" +
+    "Time: " + encodeURIComponent(time) + "%0A" +
+    "Guests: " + encodeURIComponent(guests);
+
+  window.open(
+    "https://wa.me/919999999999?text=" + message,
+    "_blank"
+  );
+}
+
+</script></body>
 </html>
